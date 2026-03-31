@@ -23,6 +23,11 @@ El proyecto sigue una estructura modular separando TypeDefs, Resolvers y Context
 ### Prerrequisitos
 - Node.js (v20+) o Docker Desktop
 
+### 🔑 Variables de Entorno
+Este proyecto requiere un archivo `.env` en la raíz. Puedes usar `.env.example` como plantilla:
+1. `cp .env.example .env` (o créalo manualmente).
+2. Completa tu `DATABASE_URL` y un `JWT_SECRET` seguro.
+
 ### Configuración (Manual)
 1. Instalar dependencias: `npm install`
 2. Configurar el archivo `.env` con tu `DATABASE_URL` y `JWT_SECRET`.
@@ -60,6 +65,11 @@ The project follows a modular structure, decoupling TypeDefs, Resolvers, and Con
 
 ### Prerequisites
 - Node.js (v20+) or Docker Desktop
+
+### 🔑 Environment Variables
+This project requires a `.env` file in the root directory. You can use `.env.example` as a template:
+1. `cp .env.example .env` (or manually create it).
+2. Fill in your `DATABASE_URL` and a secure `JWT_SECRET`.
 
 ### Setup (Manual)
 1. Install dependencies: `npm install`
