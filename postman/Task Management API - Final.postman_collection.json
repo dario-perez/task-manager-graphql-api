@@ -1,0 +1,358 @@
+{
+  "info": {
+    "_postman_id": "d4f48eb9-b620-4cb3-a12c-82b53c0b61eb",
+    "name": "Task Management API - Final",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53628856",
+    "_collection_link": "https://go.postman.co/collection/53628856-d4f48eb9-b620-4cb3-a12c-82b53c0b61eb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation Register($email: String!, $password: String!, $role: String!) {\r\n  register(email: $email, password: $password, role: $role) {\r\n    id\r\n    email\r\n    role\r\n  }\r\n}",
+                "variables": "{\r\n  \"email\": \"boss@test.com\",\r\n  \"password\": \"mi_password_segura\",\r\n  \"role\": \"ADMIN\"\r\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Register User=mutation Register($email: String!, $password: String!, $role: String!) { register(email: $email, password: $password, role: $role) { id email role } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Register User",
+                  "value": "mutation Register($email: String!, $password: String!, $role: String!) { register(email: $email, password: $password, role: $role) { id email role } }",
+                  "description": "Create initial user"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation Login($email: String!, $password: String!) {\r\n  login(email: $email, password: $password)\r\n}",
+                "variables": "{\r\n  \"email\": \"boss@test.com\",\r\n  \"password\": \"mi_password_segura\"\r\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Login=mutation Login($email: String!, $password: String!) { login(email: $email, password: $password) }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Login",
+                  "value": "mutation Login($email: String!, $password: String!) { login(email: $email, password: $password) }",
+                  "description": "Obtain the JWT and set the variable"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation { \r\n    createTask(title: \"Finish Postman docs\") { id title completed } \r\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Create Task=mutation { createTask(title: \"Finish Postman docs\") { id title completed } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Create Task",
+                  "value": "mutation { createTask(title: \"Finish Postman docs\") { id title completed } }",
+                  "description": "Verify creation associated with the author"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query { myTasks { id title completed } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?My Tasks=query { myTasks { id title completed } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "My Tasks",
+                  "value": "query { myTasks { id title completed } }",
+                  "description": "Validate that the user can only see their own tasks"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation Create($title: String!) { \r\n    createTask(title: $title) { id title completed } \r\n}",
+                "variables": "{\r\n  \"title\": \"Estudiar para el simulacro DevOps\"\r\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Create Task=mutation Create($title: String!) { createTask(title: $title) { id title completed } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Create Task",
+                  "value": "mutation Create($title: String!) { createTask(title: $title) { id title completed } }",
+                  "description": "The system associates the authorId through the token"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query { myTasks { id title completed } }",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?My Task=query { myTasks { id title completed } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "My Task",
+                  "value": "query { myTasks { id title completed } }",
+                  "description": "Displays tasks of the authenticated user"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation Update($id: ID!, $completed: Boolean!) { \r\n    updateTask(id: $id, completed: $completed) { id title completed } \r\n}",
+                "variables": "{\r\n  \"id\": \"516ed773-028b-4c4d-b581-723102ee394c\",\r\n  \"completed\": true\r\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Update Task=mutation Update($id: ID!, $completed: Boolean!) { updateTask(id: $id, completed: $completed) { id title completed } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Update Task",
+                  "value": "mutation Update($id: ID!, $completed: Boolean!) { updateTask(id: $id, completed: $completed) { id title completed } }",
+                  "description": "Validates that the task belongs to the user"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation Delete($id: ID!) { deleteTask(id: $id) { id title } }",
+                "variables": "{\"id\": \"516ed773-028b-4c4d-b581-723102ee394c\"}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Delete Task=mutation Delete($id: ID!) { deleteTask(id: $id) { id title } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Delete Task",
+                  "value": "mutation Delete($id: ID!) { deleteTask(id: $id) { id title } }",
+                  "description": "Only the owner can delete it"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Access",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query GetAllTasks {\r\n  allTasks {\r\n    id\r\n    title\r\n    completed\r\n    author {\r\n      id\r\n      email\r\n    }\r\n  }\r\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?All Tasks=query GetAllTasks {\n  allTasks {\n    id\n    title\n    completed\n    author {\n      id\n      email\n    }\n  }\n}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "All Tasks",
+                  "value": "query GetAllTasks {\n  allTasks {\n    id\n    title\n    completed\n    author {\n      id\n      email\n    }\n  }\n}",
+                  "description": "Test the ADMIN role (RBAC)"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation Delete($id: ID!) { deleteTask(id: $id) { id title } }",
+                "variables": "{\"id\": \"516ed773-028b-4c4d-b581-723102ee394c\"}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}?Global Delete=mutation Delete($id: ID!) { deleteTask(id: $id) { id title } }",
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "Global Delete",
+                  "value": "mutation Delete($id: ID!) { deleteTask(id: $id) { id title } }",
+                  "description": "ADMIN requirement: Delete any task"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "const response = pm.response.json();\r",
+          "if (response.data && response.data.login) {\r",
+          "    pm.collectionVariables.set(\"jwt_token\", response.data.login);\r",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ]
+}

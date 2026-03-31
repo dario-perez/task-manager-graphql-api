@@ -1,62 +1,39 @@
-export const typeDefs = /* GraphQL */ `
+export const typeDefs = `#graphql
+  # Represents a system user with their assigned role [cite: 6]
   type User {
-    id: String!
+    id: ID!
     email: String!
     role: String!
-    posts: [Post!]!
-    comments: [Comment!]!
+    tasks: [Task!]!
   }
 
-  type Tag {
-    id: String!
-    name: String!
-    posts: [Post!]!
-  }
-
-  type Post {
-    id: String!
+  # Task entity including the mandatory completion state 
+  type Task {
+    id: ID!
     title: String!
-    content: String!
-    published: Boolean!
+    completed: Boolean! # Mandatory state field (pending/completed) 
     author: User!
-    tags: [Tag!]!
-    comments: [Comment!]!
-  }
-
-  type Comment {
-    id: String!
-    text: String!
-    createdAt: String!
-    author: User!
-    post: Post!
   }
 
   type Query {
-    hello: String
-    users: [User!]!
-    myPosts: [Post!]!
-    feed(skip: Int, take: Int, filter: String): [Post!]!
-  }
-
-  input UpdatePostInput {
-    title: String
-    content: String
-    published: Boolean
-  }
-
-  input CreatePostInput {
-    title: String!
-    content: String!
-    tags: [String!]
+    # Returns the authenticated user profile
+    me: User
+    # Fetches tasks belonging exclusively to the authenticated user [cite: 15]
+    myTasks: [Task!]!
+    # Administrative query to retrieve all tasks in the system [cite: 16]
+    allTasks: [Task!]! 
   }
 
   type Mutation {
+    # User registration and authentication [cite: 9]
     register(email: String!, password: String!, role: String): User!
-    login(email: String!, password: String!): String!
-    createPost(data: CreatePostInput!): Post!
-    publishPost(id: String!): Post!
-    updatePost(id: String!, data: UpdatePostInput!): Post!
-    deletePost(id: String!): Post!
-    createComment(postId: String!, text: String!): Comment!
+    login(email: String!, password: String!): String! # Returns a signed JWT [cite: 10]
+
+    # Task management mutations [cite: 15]
+    createTask(title: String!): Task!
+    # Allows users to toggle the "completed" state of their tasks [cite: 15]
+    updateTask(id: ID!, completed: Boolean!): Task!
+    # Authorized deletion logic: Users can delete own, ADMIN can delete any [cite: 15, 16]
+    deleteTask(id: ID!): Task!
   }
 `;

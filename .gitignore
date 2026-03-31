@@ -1,7 +1,32 @@
-node_modules
-# Keep environment variables out of version control
-.env
-dist
-generated
+# Dependency directories
+node_modules/
+jspm_packages/
 
-/generated/prisma
+# Build and output
+dist/
+build/
+*.tsbuildinfo
+
+# Prisma generated client
+# We generate this in the CI/CD or Docker build, so we don't track it
+src/generated/
+
+# Environment variables
+# CRITICAL: Never commit credentials or local secrets
+.env
+.env.local
+.env.*.local
+
+# Docker logs and data
+*.log
+docker-compose.override.yml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo

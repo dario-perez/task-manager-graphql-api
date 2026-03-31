@@ -39,6 +39,15 @@ Este proyecto requiere un archivo `.env` en la raíz. Puedes usar `.env.example`
 1. Configurar archivo `.env`.
 2. Ejecutar `docker-compose up --build`
 
+### 🚀 Cómo Probar la API
+
+Para facilitar las pruebas de los endpoints, he incluido una colección de **Postman** en el repositorio.
+
+1.  📂 **Importar:** Carga el archivo localizado en `./postman/Backend_DevOps_Pathway.postman_collection.json` en tu Postman.
+2.  ⚙️ **Variables:** Configura la variable de colección `base_url` como `http://localhost:4000/graphql`.
+3.  🔑 **Auth:** Registra un usuario y realiza el login para obtener el `jwt_token`.
+4.  🛡️ **Herencia:** La colección ya está configurada para heredar el token automáticamente en todas las peticiones protegidas.
+
 ---
 
 # Task Management API (GraphQL)
@@ -81,3 +90,12 @@ This project requires a `.env` file in the root directory. You can use `.env.exa
 ### Setup (Docker - Recommended)
 1. Configure `.env` file.
 2. Run `docker-compose up --build`
+
+### How to Test the API
+
+To streamline endpoint testing, I have included a **Postman** collection within this repository.
+
+1.  📂 **Import:** Load the file located at `./postman/Backend_DevOps_Pathway.postman_collection.json` into Postman.
+2.  ⚙️ **Variables:** Set the `base_url` collection variable to `http://localhost:4000/graphql`.
+3.  🔑 **Auth:** Register a user and perform a login mutation to retrieve the `jwt_token`.
+4.  🛡️ **Inheritance:** The collection is pre-configured to automatically inherit the token for all protected requests once set at the root level.

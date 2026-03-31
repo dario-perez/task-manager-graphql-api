@@ -1,63 +1,32 @@
-// This is your Prisma schema file,
-// This is your Prisma schema file
+// Database source definition. Note: In Prisma 6+, connection management 
+// is handled primarily via the PrismaClient constructor and adapters.
+datasource db {
+  provider = "postgresql"
+  // The 'url' property in schema is deprecated for direct connections 
+  // in newer versions to favor programmatic configuration.
+}
 
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
+  // 'driverAdapters' is now stable; no longer required as a preview feature.
 }
 
-datasource db {
-  provider = "postgresql"
-}
-
+// User entity: Implements core identity and Role-Based Access Control (RBAC). [cite: 6]
 model User {
-  id       String    @id @default(uuid())
-  email    String    @unique
-  password String
-  role     String    @default("USER")
-  posts    Post[]
-  tasks    Task[]
-  comments Comment[]
+  id       String @id @default(uuid())
+  email    String @unique
+  password String // Sensitive data: Must be stored as a salted bcrypt hash. [cite: 9]
+  role     String @default("USER") // Access discriminator (ADMIN or USER). [cite: 14]
+  tasks    Task[] // One-to-many relation: Links users to their created resources. [cite: 15]
 }
 
-model Post {
-  id        String    @id @default(uuid())
-  title     String
-  content   String
-  published Boolean   @default(false)
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
-  tags      Tag[]
-  comments  Comment[]
-}
-
-model Tag {
-  id    String @id @default(uuid())
-  name  String @unique
-  posts Post[]
-}
-
+// Task entity: Represents the primary business resource for the management system. [cite: 7]
 model Task {
   id        String  @id @default(uuid())
   title     String
+  // State tracking: Boolean flag mapping the "completed/pending" requirement. [cite: 7]
   completed Boolean @default(false)
-  userId    String
-  author    User    @relation(fields: [userId], references: [id])
-}
-
-model Comment {
-  id        String   @id @default(uuid())
-  text      String
-  createdAt DateTime @default(now())
-
-  post   Post   @relation(fields: [postId], references: [id])
-  postId String
-
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
-}
-
-enum Role {
-  USER
-  ADMIN
+  author    User    @relation(fields: [authorId], references: [id])
+  authorId  String // Foreign key for strict data ownership and authorization. [cite: 15]
 }
