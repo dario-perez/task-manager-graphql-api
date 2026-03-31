@@ -18,6 +18,22 @@ Este proyecto es una API robusta y segura construida para un sistema de gestión
 ## 📂 Arquitectura
 El proyecto sigue una estructura modular separando TypeDefs, Resolvers y Contexto para asegurar la escalabilidad.
 
+## 🛠️ Configuración Inicial
+
+### Prerrequisitos
+- Node.js (v20+) o Docker Desktop
+
+### Configuración (Manual)
+1. Instalar dependencias: `npm install`
+2. Configurar el archivo `.env` con tu `DATABASE_URL` y `JWT_SECRET`.
+3. Generar cliente de Prisma: `npx prisma generate`
+4. Sincronizar base de datos: `npx prisma db push`
+5. Iniciar servidor: `npm run dev`
+
+### Configuración (Docker - Recomendado)
+1. Configurar archivo `.env`.
+2. Ejecutar `docker-compose up --build`
+
 ---
 
 # Task Management API (GraphQL)
@@ -39,3 +55,19 @@ A robust and secure API built for a task management system, following profession
 
 ## 📂 Architecture
 The project follows a modular structure, decoupling TypeDefs, Resolvers, and Context to ensure scalability.
+
+## 🛠️ Getting Started
+
+### Prerequisites
+- Node.js (v20+) or Docker Desktop
+
+### Setup (Manual)
+1. Install dependencies: `npm install`
+2. Configure `.env` file with your `DATABASE_URL` and `JWT_SECRET`.
+3. Generate Prisma client: `npx prisma generate`
+4. Run migrations: `npx prisma db push`
+5. Start dev server: `npm run dev`
+
+### Setup (Docker - Recommended)
+1. Configure `.env` file.
+2. Run `docker-compose up --build`
