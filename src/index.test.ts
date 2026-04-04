@@ -1,19 +1,37 @@
 import { expect, test } from 'vitest';
 import supertest from 'supertest';
 
-// Apuntamos a tu servidor (asegurate de que esté corriendo)
-const request = supertest('http://localhost:4000');
+const request = supertest('http://localhost:3000');
 
-test('Debe bloquear el acceso a la lista de usuarios si no soy ADMIN', async () => {
+test('Should block access to allTasks if user is not ADMIN', async () => {
   const query = {
-    query: '{ users { email } }'
+    query: '{ allTasks { id } }',
   };
 
   const response = await request
     .post('/graphql')
+    .set('Content-Type', 'application/json')
     .send(query);
 
   expect(response.body.errors).toBeDefined();
-  
-  expect(response.body.errors[0].message).toContain('Administrator permissions required');
+  expect(response.body.errors[0].message).toContain('Administrator access only');
+});
+
+test('Should not allow registering as ADMIN', async () => {
+  const query = {
+    query: `
+      mutation {
+        register(email: "hacker@test.com", password: "password123") {
+          role
+        }
+      }
+    `,
+  };
+
+  const response = await request
+    .post('/graphql')
+    .set('Content-Type', 'application/json')
+    .send(query);
+
+  expect(response.body.data.register.role).toBe('USER');
 });

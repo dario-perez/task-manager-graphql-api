@@ -11,7 +11,7 @@ export const typeDefs = `#graphql
   type Task {
     id: ID!
     title: String!
-    completed: Boolean! # Mandatory state field (pending/completed) 
+    completed: Boolean!
     author: User!
   }
 
@@ -26,8 +26,8 @@ export const typeDefs = `#graphql
 
   type Mutation {
     # User registration and authentication [cite: 9]
-    register(email: String!, password: String!, role: String): User!
-    login(email: String!, password: String!): String! # Returns a signed JWT [cite: 10]
+    register(email: String!, password: String!): User!
+    login(email: String!, password: String!): String!
 
     # Task management mutations [cite: 15]
     createTask(title: String!): Task!

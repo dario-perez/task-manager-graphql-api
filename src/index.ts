@@ -2,7 +2,7 @@ import 'dotenv/config';
 import fastify from 'fastify';
 import cors from '@fastify/cors';
 import { createSchema, createYoga } from 'graphql-yoga';
-import { PrismaClient } from './generated/prisma/index.js';
+import { PrismaClient, Prisma } from './generated/prisma/index.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
@@ -15,6 +15,10 @@ import { YogaContext, getUserData } from './context/index.js';
  * Infrastructure: Database Connection Setup
  * Using pg.Pool with PrismaPg adapter for optimized connection pooling.
  */
+if (!process.env.JWT_SECRET) {
+  throw new Error('FATAL: JWT_SECRET environment variable is not set.');
+}
+
 const { Pool } = pg;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
@@ -32,13 +36,18 @@ const yoga = createYoga<YogaContext>({
   context: async (initialContext) => ({
     ...initialContext,
     prisma,
-    // Extracts user identity and roles from the Authorization header
     user: getUserData(initialContext.req),
   }),
   maskedErrors: {
     maskError(error: unknown) {
       console.error('🚨 INTERNAL_ERROR:', error);
-      // Prevents leaking sensitive stack traces to the client
+
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          return new Error('An account with this email already exists.');
+        }
+      }
+
       if (error instanceof Error) return error;
       return new Error('An unexpected error occurred. 🛠️');
     },
@@ -66,10 +75,7 @@ server.route({
   method: ['GET', 'POST', 'OPTIONS'],
   handler: async (req, reply) => {
     const response = await yoga.handleNodeRequest(req, { req, reply, prisma });
-    
-    // Synchronize Yoga headers with Fastify response
     response.headers.forEach((value, key) => reply.header(key, value));
-    
     reply.status(response.status);
     reply.send(await response.text());
   },
@@ -79,9 +85,11 @@ server.route({
  * Server Lifecycle Management
  * Running on host 0.0.0.0 for Docker compatibility and accessibility.
  */
+const port = process.env.PORT ? parseInt(process.env.PORT) : 4000;
+
 try {
-  await server.listen({ port: 4000, host: '0.0.0.0' });
-  console.log('🚀 Server running on http://localhost:4000/graphql');
+  await server.listen({ port, host: '0.0.0.0' });
+  console.log(`🚀 Server running on http://localhost:${port}/graphql`);
 } catch (err) {
   server.log.error(err);
   process.exit(1);

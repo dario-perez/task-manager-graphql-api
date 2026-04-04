@@ -10,9 +10,9 @@ export interface YogaContext {
   prisma: PrismaClient;
   req: FastifyRequest;
   reply: FastifyReply;
-  // User identity injected after successful JWT verification
   user: { userId: string; role: string } | null;
 }
+
 
 /**
  * Authentication Middleware: getUserData
@@ -21,14 +21,12 @@ export interface YogaContext {
  */
 export const getUserData = (req: FastifyRequest) => {
   const authHeader = req.headers.authorization;
-  
+
   if (authHeader) {
     const token = authHeader.replace('Bearer ', '');
     try {
-      // Cryptographic signature validation against the environment secret
-      return jwt.verify(token, process.env.JWT_SECRET || 'top-secret') as { userId: string; role: string };
+      return jwt.verify(token, process.env.JWT_SECRET!) as { userId: string; role: string };
     } catch (e) {
-      // Returns null on invalid or expired tokens to deny access in resolvers
       return null;
     }
   }
